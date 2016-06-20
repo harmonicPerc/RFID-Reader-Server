@@ -10,3 +10,22 @@ This repo includes the following:
 * Assuming proper operation, httpserver.py will create an http server at 192.168.1.117:5000. The following routes are accessible through POST request:
  * /index will return a JSON object containing the subset of the database JSON identified in the last set of reads from the TCP connection with the M6e Sensor Hub
  * /picture requires the EPC to be included in the POST, and will return a picture from the database with the same name, or a default picture if no such entry exists
+
+## Sample JSON Structure
+
+{
+   "RFID Data List":[
+      {
+         "ID Number":"300833B2DDD9014035050005",
+         "Description":"RFx2 RFxpert. Graduate research side",
+         "Name":"EM Scan Platform"
+      },
+      {
+         "ID Number":"300833B2DDD9014035050000",
+         "Description":"ASUS computer used for RFID reader programming. Graduate research side",
+         "Name":"AWC-Lab-4"
+      }
+   ]
+}
+
+For a more human-readable representation, the sample JSON can be viewed at https://jsonformatter.curiousconcept.com/
