@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-import socket, signal, sys, json
-import os
+import socket, signal, sys, json, os
 
 database_file = os.path.join(os.getcwd(), 'database', 'database.json')
 current_reads_file = "reads.json"
@@ -49,8 +48,6 @@ def exit_gracefully(signum, frame):
 
 if __name__ == "__main__":
     database = get_database(database_file)
-#    sample_list = ['300833b2ddd9014035050005', '300833b2ddd9014035050000', '1234f']
-#    sample_list = map(str.upper, sample_list)    
     
     # store the original SIGINT handler for ctrl-c handling
     original_sigint = signal.getsignal(signal.SIGINT)
@@ -70,17 +67,20 @@ if __name__ == "__main__":
     
     # While loop to receive data through tcp connection until ctrl-c is pressed
     while 1:
-        
         # Wait to accept incoming connection from Wifly
         conn, addr = s.accept()
         print 'Connection address:', addr
+
         while 1:
+            # M6e is hardcoded to time out if not enough reads occur in 10 seconds
             data = conn.recv(BUFFER_SIZE)
-            if not data: break
+            # If timeout occurred, construct an empty JSON object and break loop to reconnect
+            if not data:
+                construct_json("", database)
+                break 
+            #print "data:", data
             received_tags = find_uniques(data)
-            print "received data:", received_tags
-            
+            print "received data:", received_tags          
             construct_json(received_tags, database)
             
         conn.close()
-    
